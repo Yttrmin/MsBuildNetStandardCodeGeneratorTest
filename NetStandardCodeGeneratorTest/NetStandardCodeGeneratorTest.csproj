@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <Target Name="GenerateCodeFile" BeforeTargets="Compile">
+    <Exec Command="copy &quot;$(SolutionDir)source.txt&quot; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
+  </Target>
+
 </Project>
