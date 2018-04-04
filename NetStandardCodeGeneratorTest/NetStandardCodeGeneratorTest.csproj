@@ -10,12 +10,18 @@
        BeforeBuild and PreBuildEvent don't seem to run unless a build is manually triggered by a user. So you'll get Intellisense errors until you actually go to build.
        -->
   <Target Name="GenerateCodeFile" BeforeTargets="PreBuildEvent">
+    <!-- This property is used to determine whether to "<Compile Include" the file or not.
+         On the first generation where the file does not exist, the file will not be included by the implicit wildcard Include, so it won't get passed to the compiler. 
+         On subsequent builds where the file already exists, the file will already be included by the implicit wildcard Include, so doing another "<Compile Include" will trigger a CS2002 warning. -->
+    <PropertyGroup>
+      <FirstTimeGeneration Condition="!Exists('$(ProjectDir)GeneratedClass.cs')">true</FirstTimeGeneration>
+    </PropertyGroup>
     <!-- In lieu of an actual code-generating executable, just echo some code to a file. -->
     <Exec Command="echo static class GeneratedClass { public static string TestValue = string.Empty; } &gt; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
-    <!-- If this isn't here then the generated source file won't be compiled (visibly missing in the MSBuild echo of csc.exe's command line arguments).
-         This can cause CS2002 warnings (source file specified multiple times) if the file is already generated. -->
+    <!-- If this isn't here then the generated source file won't be compiled on its first generation (visibly missing in the MSBuild echo of csc.exe's command line arguments). -->
     <ItemGroup>
-      <Compile Include="$(ProjectDir)GeneratedClass.cs" />
+      <!-- Only perform this for the first generation, otherwise we will trigger CS2002 warnings. -->
+      <Compile Include="$(ProjectDir)GeneratedClass.cs" Condition="'$(FirstTimeGeneration)' == 'true'" />
     </ItemGroup>
   </Target>
 
