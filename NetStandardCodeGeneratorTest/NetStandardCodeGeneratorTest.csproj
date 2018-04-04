@@ -4,13 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- There are other possible Targets that work here besides Compile, such as PrepareForBuild.
-       PreBuildEvent, which VS uses when you use the "csproj->properties->build events", notably does NOT work. The file is generated but not compiled until you perform another build.
-       Compile is not called just when a user manually triggers a build, but as a regular occurence in using the IDE. So any Target that runs before it should probably be pretty quick. -->
-  <Target Name="GenerateCodeFile" BeforeTargets="Compile">
+  <!-- There are several possible Targets that work in BeforeTargets, such as: Compile, PreBuildEvent, BeforeBuild, and PrepareForBuild.
+       PreBuildEvent is what VS uses when you use the "csproj->properties->build events" flow.
+       Compile and PrepareForBuild is not called just when a user manually triggers a build, but as a regular occurence in using the IDE. So any Target that runs before it should probably be pretty quick. On the plus side, you don't have to manually trigger a build.
+       BeforeBuild and PreBuildEvent don't seem to run unless a build is manually triggered by a user. So you'll get Intellisense errors until you actually go to build.
+       -->
+  <Target Name="GenerateCodeFile" BeforeTargets="PrepareForBuild" Inputs="$(SolutionDir)source.txt" Outputs="$(ProjectDir)GeneratedClass.cs">
     <!-- In lieu of an actual code-generating executable, just copy and rename a text file with code. -->
     <!-- Windows only, replace with your platform's copy command. -->
     <Exec Command="copy &quot;$(SolutionDir)source.txt&quot; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
+    <!-- If this isn't here then the generated source file won't be compiled (visibly missing in the MSBuild echo of csc.exe's command line arguments). -->
+    <ItemGroup>
+      <Compile Include="$(ProjectDir)GeneratedClass.cs" />
+    </ItemGroup>
   </Target>
 
 </Project>
