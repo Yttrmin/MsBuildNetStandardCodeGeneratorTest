@@ -4,7 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <!-- There are other possible Targets that work here besides Compile, such as PrepareForBuild.
+       PreBuildEvent, which VS uses when you use the "csproj->properties->build events", notably does NOT work. The file is generated but not compiled until you perform another build.
+       Compile is not called just when a user manually triggers a build, but as a regular occurence in using the IDE. So any Target that runs before it should probably be pretty quick. -->
   <Target Name="GenerateCodeFile" BeforeTargets="Compile">
+    <!-- In lieu of an actual code-generating executable, just copy and rename a text file with code. -->
+    <!-- Windows only, replace with your platform's copy command. -->
     <Exec Command="copy &quot;$(SolutionDir)source.txt&quot; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
   </Target>
 
