@@ -3,12 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStandardCodeGeneratorTest", "NetStandardCodeGeneratorTest\NetStandardCodeGeneratorTest.csproj", "{F1775E4E-705A-43D4-9596-2977F18F58DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetStandardCodeGeneratorTest", "NetStandardCodeGeneratorTest\NetStandardCodeGeneratorTest.csproj", "{F1775E4E-705A-43D4-9596-2977F18F58DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F5ADC4E-1646-4E63-83FA-C281BCCAD860}"
-	ProjectSection(SolutionItems) = preProject
-		source.txt = source.txt
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

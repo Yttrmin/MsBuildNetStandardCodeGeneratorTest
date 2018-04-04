@@ -1,4 +1,0 @@
-public static class GeneratedClass
-{
-	public const string TestValue = "Hello";
-}

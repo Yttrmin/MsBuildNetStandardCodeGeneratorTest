@@ -9,11 +9,11 @@
        Compile and PrepareForBuild is not called just when a user manually triggers a build, but as a regular occurence in using the IDE. So any Target that runs before it should probably be pretty quick. On the plus side, you don't have to manually trigger a build.
        BeforeBuild and PreBuildEvent don't seem to run unless a build is manually triggered by a user. So you'll get Intellisense errors until you actually go to build.
        -->
-  <Target Name="GenerateCodeFile" BeforeTargets="PrepareForBuild" Inputs="$(SolutionDir)source.txt" Outputs="$(ProjectDir)GeneratedClass.cs">
-    <!-- In lieu of an actual code-generating executable, just copy and rename a text file with code. -->
-    <!-- Windows only, replace with your platform's copy command. -->
-    <Exec Command="copy &quot;$(SolutionDir)source.txt&quot; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
-    <!-- If this isn't here then the generated source file won't be compiled (visibly missing in the MSBuild echo of csc.exe's command line arguments). -->
+  <Target Name="GenerateCodeFile" BeforeTargets="PreBuildEvent">
+    <!-- In lieu of an actual code-generating executable, just echo some code to a file. -->
+    <Exec Command="echo static class GeneratedClass { public static string TestValue = string.Empty; } &gt; &quot;$(ProjectDir)GeneratedClass.cs&quot;" />
+    <!-- If this isn't here then the generated source file won't be compiled (visibly missing in the MSBuild echo of csc.exe's command line arguments).
+         This can cause CS2002 warnings (source file specified multiple times) if the file is already generated. -->
     <ItemGroup>
       <Compile Include="$(ProjectDir)GeneratedClass.cs" />
     </ItemGroup>
